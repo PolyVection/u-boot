@@ -1,0 +1,7 @@
+MX6ULLEVK BOARD
+M:	Philip Voigt <info@polyvection.com>
+S:	Maintained
+F:	board/polyvection/voltastream0/
+F:	include/configs/voltastream0.h
+F:	configs/mx6ull_voltastream0_defconfig
+F:	configs/mx6ull_voltastream0_plugin_defconfig
