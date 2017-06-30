@@ -20,8 +20,6 @@
 #endif
 #endif
 
-#define PHYS_SDRAM_SIZE	SZ_512M
-
 #define CONFIG_ENV_VARS_UBOOT_RUNTIME_CONFIG
 
 /* Size of malloc() pool */
