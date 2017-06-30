@@ -9,4 +9,18 @@ config SYS_VENDOR
 config SYS_CONFIG_NAME
 	default "voltastream0"
 
+config VOLTASTREAM0_8G
+    bool "Select for the 8G version with ISSI DDR3"
+    default n
+    help
+      imximage will be created for 8Gb (1GB) DDR3 RAM
+      P/N IS43TR16512A-125KBL other 8Gb might work as well
+
+config VOLTASTREAM0_4G
+    bool "Select for the 4G version with SAMSUNG DDR3"
+    default n
+    help
+      imximage will be created for 4Gb (512MB) DDR3 RAM
+      P/N K4B4G1646D_BCK0 other 4Gb might work as well
+
 endif
