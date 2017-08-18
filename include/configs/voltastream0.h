@@ -55,7 +55,8 @@
 			"setenv swbank 2; saveenv; " \
 		"else " \
 			"setenv swbank 1; saveenv; " \
-		"fi;\0" \
+		"fi; " \
+		"echo swbank=${swbank};\0" \
 	"mmcargs=setenv bootargs console=ttymxc0,115200 " \
 		"root=/dev/mmcblk1p${swbank} coherent_pool=4M net.ifnames=0 rootwait rw\0" \
 	"loadimage=ext4load mmc 0:${swbank} 0x80800000 /boot/zImage\0" \
@@ -75,11 +76,37 @@
            	"if run loadimage; then " \
 	   		"run mmcboot; " \
 		"else " \
-			"echo No kernel found - switching bank!; " \
+			"echo No kernel found on try 1- switching bank!; " \
 			"run switch; " \
-			"if run loadimage; then " \
-	   			"run mmcboot; " \
-			"fi; " \
+           	"fi; " \
+	   "fi;" \
+	   "mmc dev 0;" \
+	   "mmc dev 0;" \
+	   "if mmc rescan; then " \
+           	"if run loadimage; then " \
+	   		"run mmcboot; " \
+		"else " \
+			"echo No kernel found on try 2 - switching bank!; " \
+			"run switch; " \
+           	"fi; " \
+	   "fi;" \
+	   "mmc dev 0;" \
+	   "mmc dev 0;" \
+	   "if mmc rescan; then " \
+           	"if run loadimage; then " \
+	   		"run mmcboot; " \
+		"else " \
+			"echo No kernel found on try 3 - switching bank!; " \
+			"run switch; " \
+           	"fi; " \
+	   "fi;" \
+	   "mmc dev 0;" \
+	   "mmc dev 0;" \
+	   "if mmc rescan; then " \
+           	"if run loadimage; then " \
+	   		"run mmcboot; " \
+		"else " \
+			"echo No kernel found on try 4 - ROOTFS CORRUPTED!; " \
            	"fi; " \
 	   "fi;"
 
