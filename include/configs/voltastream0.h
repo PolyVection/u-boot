@@ -60,7 +60,7 @@
 	"mmcargs=setenv bootargs console=ttymxc0,115200 " \
 		"root=/dev/mmcblk1p${swbank} coherent_pool=4M net.ifnames=0 rootwait rw\0" \
 	"loadimage=ext4load mmc 0:${swbank} 0x80800000 /boot/zImage\0" \
-	"loadfdt=ext4load mmc 0:${swbank} 0x83000000 /boot/imx6ull-voltastream0.dtb\0" \
+	"loadfdt=ext4load mmc 0:${swbank} 0x83000000 ${fdt_file}\0" \
 	"mmcboot=echo Booting from swbank=${swbank} ...; " \
 		"run mmcargs; " \
 		"if run loadfdt; then " \

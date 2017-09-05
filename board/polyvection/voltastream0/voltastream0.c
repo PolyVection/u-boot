@@ -18,6 +18,10 @@
 #include <fsl_esdhc.h>
 #include <linux/sizes.h>
 #include <mmc.h>
+#include <command.h>
+#include <console.h>
+#include <fuse.h>
+#include <linux/errno.h>
 
 DECLARE_GLOBAL_DATA_PTR;
 
@@ -83,8 +87,36 @@ int board_late_init(void)
 #endif
 
 #ifdef CONFIG_ENV_VARS_UBOOT_RUNTIME_CONFIG
-	setenv("board_name", "ZERO");
-	setenv("board_rev", "Rev.A");
+	setenv("board_name", "VS");
+	setenv("board_rev", "A1");
+	setenv("uboot_ver", "1");
+
+	u32 bank, word, val;
+	int ret;
+	bank=4;
+	word=7;
+	ret = fuse_read(bank, word, &val);
+	if (ret) goto err;
+	
+	if (val == 00000005){
+		setenv("fdt_file", "/boot/imx6ull-voltastream-amp1.dtb");}
+	else if (val == 00000004){
+		setenv("fdt_file", "/boot/imx6ull-voltastream0.dtb");}
+	else if (val == 00000003){
+		setenv("fdt_file", "/boot/imx6ull-voltastream0.dtb");}
+	else if (val == 00000002){
+		setenv("fdt_file", "/boot/imx6ull-voltastream0.dtb");}
+	else if (val == 00000001){
+		setenv("fdt_file", "/boot/imx6ull-voltastream0.dtb");}
+	else {
+		setenv("fdt_file", "/boot/imx6ull-voltastream0.dtb");}
+
+	return 0;
+
+err:
+	puts("ERROR while reading fuses!\n");
+	return CMD_RET_FAILURE;
+
 #endif
 
 	return 0;
@@ -92,7 +124,29 @@ int board_late_init(void)
 
 int checkboard(void)
 {
-	puts("Board: VoltaStream ZERO\n");
+	u32 bank, word, val;
+	int ret;
+	bank=4;
+	word=7;
+	ret = fuse_read(bank, word, &val);
+	if (ret) goto err;
+	
+	if (val == 00000005)
+		puts("Board: VS AMP1\n");
+	else if (val == 00000004)
+		puts("Board: VS ZERO - RAM:8G DAC:42\n");
+	else if (val == 00000003)
+		puts("Board: VS ZERO - RAM:8G DAC:21\n");
+	else if (val == 00000002)
+		puts("Board: VS ZERO - RAM:4G DAC:42\n");
+	else if (val == 00000001)
+		puts("Board: VS ZERO - RAM:4G DAC:21\n");
+	else
+		puts("Board: Unknown\n");
 
 	return 0;
+
+err:
+	puts("ERROR while reading fuses!\n");
+	return CMD_RET_FAILURE;
 }
